@@ -1,7 +1,7 @@
 {
   "name": "@kyleshevlin/kase",
   "version": "0.1.0",
-  "description": "A simple pattern matcher",
+  "description": "A simple type-safe pattern matcher",
   "type": "module",
   "source": "src/index.ts",
   "main": "./dist/kase.cjs",
