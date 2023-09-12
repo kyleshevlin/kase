@@ -9,7 +9,8 @@
   "unpkg": "./dist/kase.umd.js",
   "files": [
     "dist",
-    "src"
+    "src/**/*.ts",
+    "!src/**/*.test.ts"
   ],
   "exports": {
     "require": "./dist/kase.cjs",
