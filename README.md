@@ -1,6 +1,6 @@
 # @kyleshevlin/kase
 
-A simple pattern matching function.
+A simple, type-safe pattern-ish matching function.
 
 ```javascript
 const result = kase(person.age)
