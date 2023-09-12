@@ -1,0 +1,44 @@
+{
+  "name": "@kyleshevlin/kase",
+  "version": "0.1.0",
+  "description": "A simple pattern matcher",
+  "type": "module",
+  "source": "src/index.ts",
+  "main": "./dist/kase.cjs",
+  "module": "./dist/kase.module.js",
+  "unpkg": "./dist/kase.umd.js",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "exports": {
+    "require": "./dist/kase.cjs",
+    "default": "./dist/kase.modern.js"
+  },
+  "types": "./dist/kase.d.ts",
+  "scripts": {
+    "build": "microbundle",
+    "dev": "microbundle watch",
+    "format": "pretter --write src/**/*.ts",
+    "prerelease": "rm -rf dist && npm run build",
+    "release": "npx np",
+    "test": "jest --coverage",
+    "test:watch": "jest --watch"
+  },
+  "author": "Kyle Shevlin <kyle.a.shevlin@gmail.com> (https://kyleshevlin.com/)",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kyleshevlin/kase.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.4",
+    "jest": "^29.6.4",
+    "microbundle": "^0.15.1",
+    "prettier": "^3.0.3",
+    "ts-jest": "^29.1.1"
+  }
+}
