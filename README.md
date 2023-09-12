@@ -22,24 +22,55 @@ const result = kase(person.age)
 
 ## API
 
+**Note**: It might be to your benefit to take a look at the types in `kase.ts`.
+
 ### `kase`
 
-`kase` takes a `left` which is any value, and stores it to be compared to the `right`s passed in the `when` methods.
+```typescript
+function kase(input) {}
+```
+
+`kase` takes an `input` which is any value, and stores it to be compared to the `pattern`s passed to the `when` and `otherwise` methods.
 
 ### `when`
 
-`when` receives a `right` to compare to the `left`. `right` can either be a predicate function that receives the `left` as an argument, or a value to strictly compare to the `left`.
+```typescript
+function when(pattern, callback) {}
+```
 
-The first `when` to return a `true` match is the result of the `kase` chain.
+`when` receives a `pattern` to compare to the `input`. A `pattern` can either be a value of the same type as `input`, or a predicate function that receives the `input` as an argument. If the `pattern` argument is a value, it is matched strictly against the `input` with `===`.
 
-Each `when` must also supply a callback function that receives the `left` as an argument. The returned value of the callback is the result returned at the end of the chain.
+`when` also receives a `callback` function which should return the desired result should a match be found. The first `when` to match is the result of the `kase` chain.
 
 ### `otherwise`
 
-A method for providing a default result. Recieves a callback function that recieves the `left` as an argument.
+```typescript
+function otherwise(callback) {}
+```
+
+`otherwise` is how we provide a default result. It receives a `callback` exactly like `when`. `otherwise` will return the result of the `callback` as the result of the entire chain.
 
 ### `end`
 
-If no `otherwise` is provided, `end` is used to complete the chain and return the result
+```typescript
+function end() {}
+```
 
-###
+If no `otherwise` is provided, `end` is necessary to complete the chain and return the result. Like so:
+
+```javascript
+const result = kase(Math.random())
+  .when(
+    x => x <= 0.33,
+    () => 'low'
+  )
+  .when(
+    x => x <= 0.67,
+    () => 'mid'
+  )
+  .when(
+    x => x <= 0.99,
+    () => 'high'
+  )
+  .end() // would return `undefined` in the cases where x is > .99
+```
