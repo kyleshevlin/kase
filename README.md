@@ -20,6 +20,12 @@ const result = kase(person.age)
   .otherwise(() => 'Uhh, do you even have a pulse?')
 ```
 
+## Installation
+
+```
+npm install @kyleshevlin/kase
+```
+
 ## API
 
 **Note**: It might be to your benefit to take a look at the types in `kase.ts`.
