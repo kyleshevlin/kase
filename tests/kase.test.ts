@@ -1,4 +1,4 @@
-import { kase } from './kase'
+import { kase } from '../src/kase'
 
 describe('kase', () => {
   it('should return the first `when` that matches', () => {
