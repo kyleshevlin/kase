@@ -19,6 +19,15 @@ describe('kase', () => {
     expect(result).toEqual(undefined)
   })
 
+  it('should return the existing match if `otherwise` is called', () => {
+    const result = kase('a')
+      .when('a', () => 'first')
+      .when('b', () => 'second')
+      .otherwise(() => 'third')
+
+    expect(result).toEqual('first')
+  })
+
   it('should return `otherwise` callback result if all `when`s fail', () => {
     const result = kase('a')
       .when('b', () => 'b')
