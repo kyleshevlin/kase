@@ -19,7 +19,7 @@
   "scripts": {
     "build": "microbundle",
     "dev": "microbundle watch",
-    "format": "pretter --write src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
     "prerelease": "rm -rf dist && npm run build",
     "release": "npx np",
     "test": "jest --coverage",
