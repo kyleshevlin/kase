@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "A simple type-safe pattern matcher",
   "type": "module",
-  "source": "src/index.ts",
+  "source": "src/kase.ts",
   "main": "./dist/kase.cjs",
   "module": "./dist/kase.module.js",
   "unpkg": "./dist/kase.umd.js",
@@ -12,8 +12,11 @@
     "src"
   ],
   "exports": {
-    "require": "./dist/kase.cjs",
-    "default": "./dist/kase.modern.js"
+    ".": {
+      "types": "./dist/kase.d.ts",
+      "require": "./dist/kase.cjs",
+      "default": "./dist/kase.modern.js"
+    }
   },
   "types": "./dist/kase.d.ts",
   "scripts": {
