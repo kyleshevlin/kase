@@ -1,8 +1,16 @@
 type Callback<Input, Return> = (input: Input) => Return
 
+type Resolution<Input, Return> = Callback<Input, Return> | Return
+
 type Predicate<Input> = (input: Input) => boolean
 
 type Pattern<Input> = Predicate<Input> | Input
+
+function isCallback<Input, Return>(
+  result: Resolution<Input, Return>
+): result is Callback<Input, Return> {
+  return typeof result === 'function'
+}
 
 function isPredicate<Input>(
   pattern: Pattern<Input>
@@ -11,7 +19,17 @@ function isPredicate<Input>(
 }
 
 export function kase<Input>(input: Input) {
-  return new Kase<Input, undefined>(input, false, undefined)
+  return new Kase<Input, undefined>({
+    input,
+    isMatched: false,
+    result: undefined,
+  })
+}
+
+type KaseOptions<Input, Result> = {
+  input: Input
+  isMatched: boolean
+  result: Result
 }
 
 class Kase<Input, Result> {
@@ -19,30 +37,39 @@ class Kase<Input, Result> {
   #isMatched: boolean
   #result: Result
 
-  constructor(input: Input, isMatched: boolean, result: Result) {
+  constructor({ input, isMatched, result }: KaseOptions<Input, Result>) {
     this.#input = input
     this.#isMatched = isMatched
     this.#result = result
   }
 
+  #resolve<Return>(resolution: Resolution<Input, Return>): Return {
+    return isCallback(resolution) ? resolution(this.#input) : resolution
+  }
+
   /**
-   * Match a pattern to the input and return the callback's result
-   * if there's a match
+   * Match a pattern to the input and if there's a match,
+   * return the resolution's result
    */
   when<Return>(
     pattern: Pattern<Input>,
-    callback: Callback<Input, Return>
+    resolution: Resolution<Input, Return>
   ): this | Kase<Input, Return> {
     if (this.#isMatched) return this
 
-    const predicate = isPredicate<Input>(pattern)
-      ? () => pattern(this.#input)
-      : () => pattern === this.#input
+    const isMatch = isPredicate<Input>(pattern)
+      ? pattern(this.#input)
+      : pattern === this.#input
 
-    if (predicate()) {
-      const result = callback(this.#input)
+    if (isMatch) {
+      const result = this.#resolve(resolution)
 
-      return new Kase<Input, typeof result>(this.#input, true, result)
+      // Returning a new Kase is what enables type inference for the result
+      return new Kase<Input, typeof result>({
+        input: this.#input,
+        isMatched: true,
+        result,
+      })
     }
 
     return this
@@ -51,10 +78,10 @@ class Kase<Input, Result> {
   /**
    * Provide a default case
    */
-  otherwise<Return>(callback: Callback<Input, Return>) {
+  otherwise<Return>(resolution: Resolution<Input, Return>) {
     if (this.#isMatched) return this.#result
 
-    return callback(this.#input)
+    return this.#resolve(resolution)
   }
 
   /**

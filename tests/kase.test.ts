@@ -1,11 +1,14 @@
 import { kase } from '../src/kase'
 
 describe('kase', () => {
+  it('should handle a value as a `resolution`', () => {
+    const result = kase('a').when('a', 'first').end()
+
+    expect(result).toEqual('first')
+  })
+
   it('should return the first `when` that matches', () => {
-    const result = kase('a')
-      .when('a', () => 'first')
-      .when('a', () => 'second')
-      .end()
+    const result = kase('a').when('a', 'first').when('a', 'second').end()
 
     expect(result).toEqual('first')
   })
@@ -40,11 +43,11 @@ describe('kase', () => {
   it('should take a predicate as a `pattern`, passing the `input`', () => {
     const result = kase({ a: 'a', b: 'b', c: 'c' })
       .when(
-        left => left.a === 'aaa',
+        obj => obj.a === 'aaa',
         () => 'first'
       )
       .when(
-        left => left.b === 'b',
+        obj => obj.b === 'b',
         () => 'second'
       )
       .end()
